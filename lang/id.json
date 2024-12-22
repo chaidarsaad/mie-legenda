@@ -1,0 +1,23 @@
+{
+    "Name": "Nama",
+    "Name Expense": "Nama Pengeluaran",
+    "Name Category": "Nama Kategori",
+    "Name Product": "Nama Produk",
+    "Category": "Kategori",
+    "Price": "Harga",
+    "Amount": "Total Pengeluaran",
+    "Image": "Gambar",
+    "Date": "Tanggal",
+    "Phone": "Nomor HP",
+    "Roles": "Peran",
+    "Password": "Kata Sandi",
+    "Email Verified At": "Verifikasi email di",
+    "Created At": "Dibuat",
+    "Updated At": "Diupdate",
+    "Description": "Deskripsi",
+    "Transaction Time": "Waktu Transaksi",
+    "Total Price": "Total Harga",
+    "Total Item": "Total Produk",
+    "Cashier Name": "Nama Kasir",
+    "Payment Method": "Metode Pembayaran"
+}
