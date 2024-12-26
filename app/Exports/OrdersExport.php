@@ -14,12 +14,11 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle
      */
     public function collection()
     {
-        // Ambil data pesanan dan sertakan informasi nama kasir
-        return Order::select('transaction_time', 'total_price', 'total_item', 'payment_method')
+        return Order::select('transaction_time', 'total_price', 'total_item', 'payment_method', 'kasir_id')
             ->get()
             ->map(function ($order) {
-                // Tambahkan nama kasir dengan menggunakan relasi
-                $order->kasir_name = $order->kasir ? $order->kasir->name : 'Tidak ada kasir'; // Mengambil nama kasir
+                $kasir_name = $order->kasir ? $order->kasir->name : 'Tidak ada kasir';
+                $order->kasir_id = $kasir_name;
                 return $order;
             });
     }
@@ -31,7 +30,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle
             'total_price',
             'total_item',
             'payment_method',
-            'kasir_name'
+            'kasir_id'
         ];
     }
 
