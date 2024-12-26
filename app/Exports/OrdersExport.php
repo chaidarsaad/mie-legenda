@@ -15,7 +15,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle
     public function collection()
     {
         // Ambil data pesanan dan sertakan informasi nama kasir
-        return Order::select('transaction_time', 'total_price', 'total_item', 'payment_method', 'kasir_id')
+        return Order::select('transaction_time', 'total_price', 'total_item', 'payment_method')
             ->get()
             ->map(function ($order) {
                 // Tambahkan nama kasir dengan menggunakan relasi
@@ -31,7 +31,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle
             'total_price',
             'total_item',
             'payment_method',
-            'kasir_id'
+            'kasir_name'
         ];
     }
 
