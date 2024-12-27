@@ -5,10 +5,13 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
+use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -105,7 +108,27 @@ class OrderResource extends Resource
                         'Tunai' => ('Tunai'),
                         'qris' => ('QRIS'),
                         'transfer' => ('Transfer'),
+                    ]),
+                Filter::make('transaction_time')
+                    ->form([
+                        DatePicker::make('created_from')
+                            ->label(__('Created from'))
+                            ->default(Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00')),
+                        DatePicker::make('created_until')
+                            ->label(__('Created until'))
+                            ->default(Carbon::now()->endOfMonth()->format('Y-m-d 23:59:59')),
                     ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('transaction_time', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('transaction_time', '<=', $date),
+                            );
+                    })
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

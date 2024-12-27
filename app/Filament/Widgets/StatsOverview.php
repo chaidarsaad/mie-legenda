@@ -20,6 +20,7 @@ class StatsOverview extends BaseWidget
         $user = auth()->user();
         return $user ? $user->hasRole(['admin', 'super_admin']) : false;
     }
+
     protected function getStats(): array
     {
         $category_count = Category::count();
