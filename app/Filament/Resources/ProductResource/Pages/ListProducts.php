@@ -54,7 +54,8 @@ class ListProducts extends ListRecords
                 ->icon('heroicon-s-arrow-up-tray')
                 ->visible(function () {
                     return Product::exists();
-                }),
+                })
+                ->openUrlInNewTab(),
             Actions\CreateAction::make(),
         ];
     }

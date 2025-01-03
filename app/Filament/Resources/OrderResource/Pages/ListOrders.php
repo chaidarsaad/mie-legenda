@@ -22,7 +22,8 @@ class ListOrders extends ListRecords
                 ->icon('heroicon-s-arrow-up-tray')
                 ->visible(function () {
                     return Order::exists();
-                }),
+                })
+                ->openUrlInNewTab(),
             Actions\CreateAction::make(),
         ];
     }
