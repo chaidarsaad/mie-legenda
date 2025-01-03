@@ -65,6 +65,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])->spa();
+            ])
+            ->spa()
+            ->spaUrlExceptions(fn(): array => [
+                url(route('download-template-product')),
+                url(route('download-data')),
+                url(route('download-data-pesanan')),
+            ]);
     }
 }

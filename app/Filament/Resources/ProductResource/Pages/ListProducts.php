@@ -46,8 +46,7 @@ class ListProducts extends ListRecords
             Action::make("Download Template")
                 ->url(route('download-template-product'))
                 ->color('success')
-                ->icon('heroicon-s-arrow-down-tray')
-                ->openUrlInNewTab(),
+                ->icon('heroicon-s-arrow-down-tray'),
             Action::make("Export Produk & Kategori")
                 ->label('Export Produk & Kategori')
                 ->url(route('download-data'))
@@ -55,8 +54,7 @@ class ListProducts extends ListRecords
                 ->icon('heroicon-s-arrow-up-tray')
                 ->visible(function () {
                     return Product::exists();
-                })
-                ->openUrlInNewTab(),
+                }),
             Actions\CreateAction::make(),
         ];
     }
