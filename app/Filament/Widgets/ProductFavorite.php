@@ -22,7 +22,7 @@ class ProductFavorite extends BaseWidget
     {
         $productQuery = Product::query()
             ->withCount('orderItems')
-            ->having('order_items_count', '>', 5)
+            // ->having('order_items_count', '>', 5)
             ->orderByDesc('order_items_count')
             ->take(10);
         return $table
