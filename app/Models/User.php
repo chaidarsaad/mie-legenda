@@ -59,7 +59,14 @@ class User extends Authenticatable implements FilamentUser
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
-        $this->attributes['uid'] = str()->uuid();
+        if (!isset($this->attributes['uid'])) {
+            $this->attributes['uid'] = str()->uuid();
+        }
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'uid';
     }
 
     public function canAccessPanel(Panel $panel): bool
