@@ -35,7 +35,6 @@ class UserResource extends Resource
 
     public static function form(Form $form): Form
     {
-
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
@@ -100,7 +99,8 @@ class UserResource extends Resource
                 // Jika user memiliki super_admin, tidak perlu filter apapun
                 return $query;
             })
-            ->paginated([10, 25, 50, 100])
+            ->defaultPaginationPageOption(5)
+            ->paginated([5, 10, 25, 50, 100, 250, 500])
             ->deferLoading()
             ->columns([
                 Tables\Columns\TextColumn::make('name')
