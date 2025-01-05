@@ -31,8 +31,7 @@ class ProductFavorite extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label(__('Name Product'))
-                    ->searchable(),
+                    ->label(__('Name Product')),
                 Tables\Columns\TextColumn::make('order_items_count')
                     ->label(__('Dipesan')),
             ])->defaultPaginationPageOption(5)

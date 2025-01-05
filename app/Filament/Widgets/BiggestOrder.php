@@ -29,7 +29,6 @@ class BiggestOrder extends BaseWidget
                 Tables\Columns\TextColumn::make('transaction_time')
                     ->label('Tanggal Transaksi')
                     ->dateTime()
-                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_price')
                     ->prefix('Rp ')
@@ -37,8 +36,7 @@ class BiggestOrder extends BaseWidget
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('payment_method')
-                    ->label(__('Payment Method'))
-                    ->searchable(),
+                    ->label(__('Payment Method')),
             ])->defaultPaginationPageOption(5)
             ->poll('10s');
     }
