@@ -40,6 +40,7 @@ class ListProducts extends ListRecords
                         Notification::make()
                             ->danger()
                             ->title('Product failed to import')
+                            ->body($e->getMessage())
                             ->send();
                     }
                 }),

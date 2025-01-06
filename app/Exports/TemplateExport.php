@@ -20,12 +20,12 @@ class TemplateExport implements WithMultipleSheets
     }
 }
 
-class ProductsExport implements FromCollection, WithHeadings, WithTitle
+class ProductsExport implements WithHeadings, WithTitle
 {
-    public function collection()
-    {
-        return Product::select('name', 'category_id', 'price')->get();
-    }
+    // public function collection()
+    // {
+    //     return Product::select('name', 'category_id', 'price')->get();
+    // }
 
     public function headings(): array
     {
