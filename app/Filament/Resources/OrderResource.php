@@ -68,7 +68,7 @@ class OrderResource extends Resource
             ->poll('10s')
             ->defaultPaginationPageOption(5)
             ->paginated([5, 10, 25, 50, 100, 250, 500])
-            ->deferLoading()
+            // ->deferLoading()
             ->columns([
                 Tables\Columns\TextColumn::make('transaction_time')
                     ->label(__('Transaction Time'))

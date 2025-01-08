@@ -46,7 +46,7 @@ class CategoryResource extends Resource
         return $table
             ->defaultPaginationPageOption(5)
             ->paginated([5, 10, 25, 50, 100, 250, 500])
-            ->deferLoading()
+            // ->deferLoading()
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('Name Category'))
