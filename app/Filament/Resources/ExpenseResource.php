@@ -57,6 +57,7 @@ class ExpenseResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('id', 'desc')
             ->defaultPaginationPageOption(5)
             ->paginated([5, 10, 25, 50, 100, 250, 500])
             // ->deferLoading()
