@@ -19,11 +19,11 @@ class StatsOverview extends BaseWidget
 
     protected static ?int $sort = 0;
 
-    // public static function canView(): bool
-    // {
-    //     $user = auth()->user();
-    //     return $user ? $user->hasRole(['admin', 'super_admin']) : false;
-    // }
+    public static function canView(): bool
+    {
+        $user = auth()->user();
+        return $user ? $user->hasRole(['admin', 'super_admin']) : false;
+    }
 
     protected function getStats(): array
     {
