@@ -72,13 +72,14 @@ class OrderResource extends Resource
             // ->deferLoading()
             ->columns([
                 Tables\Columns\TextColumn::make('transaction_time')
+                    ->searchable()
                     ->label(__('Transaction Time'))
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_price')
-                    ->prefix('Rp ')
+                    ->searchable()
+                    ->money('IDR')
                     ->label(__('Total Price'))
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_item')
                     ->label(__('Total Item'))

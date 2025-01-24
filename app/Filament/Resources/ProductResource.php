@@ -79,6 +79,7 @@ class ProductResource extends Resource
                     ->label(__('Name Product'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
+                    ->searchable()
                     ->label(__('Price'))
                     ->money('IDR')
                     ->sortable(),

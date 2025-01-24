@@ -66,12 +66,12 @@ class ExpenseResource extends Resource
                     ->label(__('Name Expense'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->prefix('Rp ')
-                    ->label(__('Amount'))
+                    ->searchable()
                     ->money('IDR')
-                    ->numeric()
+                    ->label(__('Amount'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->searchable()
                     ->label(__('Created At'))
                     ->dateTime()
                     ->sortable(),
