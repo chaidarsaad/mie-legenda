@@ -44,11 +44,11 @@ class StatsOverview extends BaseWidget
         // Query logic for optional startDate and endDate
         $orderQuery = Order::query();
         if ($startDate && $endDate) {
-            $orderQuery->whereBetween('created_at', [$startDate, $endDate]);
+            $orderQuery->whereBetween('transaction_time', [$startDate, $endDate]);
         } elseif ($startDate) {
-            $orderQuery->where('created_at', '>=', $startDate);
+            $orderQuery->where('transaction_time', '>=', $startDate);
         } elseif ($endDate) {
-            $orderQuery->where('created_at', '<=', $endDate);
+            $orderQuery->where('transaction_time', '<=', $endDate);
         }
 
         $expenseQuery = Expense::query();
@@ -62,7 +62,7 @@ class StatsOverview extends BaseWidget
 
         $category_count = Category::count();
         $product_count = Product::count();
-        $order_count = Order::count();
+        $order_count = $orderQuery->count();
         $pemasukan = $orderQuery->sum('total_price');
         $pengeluaran = $expenseQuery->sum('amount');
         $laba = $pemasukan - $pengeluaran;
