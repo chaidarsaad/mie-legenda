@@ -5,10 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
+use App\Models\Product;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
@@ -37,28 +41,42 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\DateTimePicker::make('transaction_time')
-                    ->required(),
-                Forms\Components\TextInput::make('total_price')
-                    ->label(__('Total Price'))
-                    ->prefix('Rp')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('total_item')
-                    ->label(__('Total Item'))
-                    ->required()
-                    ->numeric(),
-                Forms\Components\Select::make('kasir.name')
-                    ->label(__('Cashier Name'))
-                    ->relationship('kasir', 'name')
-                    ->preload()
-                    ->required()
-                    ->native(false)
-                    ->searchable(),
-                Forms\Components\TextInput::make('payment_method')
-                    ->label(__('Payment Method'))
-                    ->required()
-                    ->maxLength(255),
+                Section::make('Order')
+                    ->collapsible()
+                    ->schema([
+                        Forms\Components\DateTimePicker::make('transaction_time')
+                            ->required(),
+                        Forms\Components\Select::make('kasir.name')
+                            ->label(__('Cashier Name'))
+                            ->relationship('kasir', 'name')
+                            ->preload()
+                            ->required()
+                            ->native(false)
+                            ->searchable(),
+                        Forms\Components\TextInput::make('payment_method')
+                            ->default('Tunai')
+                            ->label(__('Payment Method'))
+                            ->required()
+                            ->maxLength(255),
+                    ]),
+                Forms\Components\Section::make('Produk dipesan')
+                    ->collapsible()
+                    ->schema([
+                        self::getItemsRepeater(),
+                    ]),
+                Forms\Components\Section::make('Harga')
+                    ->collapsible()
+                    ->schema([
+                        Forms\Components\TextInput::make('total_item')
+                            ->label(__('Total Item'))
+                            ->numeric()
+                            ->required(),
+                        Forms\Components\TextInput::make('total_price')
+                            ->label(__('Total Price'))
+                            ->prefix('Rp')
+                            ->required()
+                            ->numeric(),
+                    ]),
             ]);
     }
 
@@ -170,5 +188,81 @@ class OrderResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
+    }
+
+    public static function getItemsRepeater(): Repeater
+    {
+        return Repeater::make('orders')
+            ->relationship()
+            ->live()
+            ->columns([
+                'md' => 10,
+            ])
+            ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set) {
+                self::updateTotalPrice($get, $set);
+            })
+            ->schema([
+                Forms\Components\Select::make('product_id')
+                    ->native(false)
+                    ->searchable()
+                    ->label('Produk')
+                    ->required()
+                    ->options(Product::query()->pluck('name', 'id'))
+                    ->columnSpan([
+                        'md' => 5
+                    ])
+                    ->afterStateHydrated(function (Forms\Set $set, Forms\Get $get, $state) {
+                        $product = Product::find($state);
+                        $set('unit_price', $product->price ?? 0);
+                    })
+                    ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
+                        $product = Product::find($state);
+                        $set('unit_price', $product->price ?? 0);
+                        $quantity = $get('quantity') ?? 1;
+                        self::updateTotalPrice($get, $set);
+                    })
+                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                    ->preload(),
+                Forms\Components\TextInput::make('quantity')
+                    ->required()
+                    ->numeric()
+                    ->default(1)
+                    ->minValue(1)
+                    ->columnSpan([
+                        'md' => 1
+                    ])
+                    ->afterStateUpdated(function (Forms\Set $set, Forms\Get $get) {
+                        self::updateTotalPrice($get, $set);
+                    }),
+                Forms\Components\TextInput::make('unit_price')
+                    ->label('Harga saat ini')
+                    ->required()
+                    ->numeric()
+                    ->readOnly()
+                    ->columnSpan([
+                        'md' => 3
+                    ]),
+
+            ]);
+    }
+
+    protected static function updateTotalPrice(Forms\Get $get, Forms\Set $set): void
+    {
+        $selectedProducts = collect($get('orders'))->filter(fn($item) => !empty($item['product_id']) && !empty($item['quantity']));
+
+        $prices = Product::find($selectedProducts->pluck('product_id'))->pluck('price', 'id');
+
+        // Menghitung total harga
+        $totalPrice = $selectedProducts->reduce(function ($total, $product) use ($prices) {
+            return $total + ($prices[$product['product_id']] * $product['quantity']);
+        }, 0);
+
+        // Menghitung total jumlah item
+        $totalItem = $selectedProducts->reduce(function ($total, $product) {
+            return $total + $product['quantity'];
+        }, 0);
+
+        $set('total_price', $totalPrice);
+        $set('total_item', $totalItem);
     }
 }
