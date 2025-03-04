@@ -16,6 +16,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -133,23 +134,34 @@ class OrderResource extends Resource
                     ]),
                 Filter::make('transaction_time')
                     ->form([
-                        DatePicker::make('created_from')
-                            ->label(__('Created from'))
-                            ->default(Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00')),
-                        DatePicker::make('created_until')
-                            ->label(__('Created until'))
-                            ->default(Carbon::now()->endOfMonth()->format('Y-m-d 23:59:59')),
+                        DatePicker::make('pesanan_dari'),
+                        DatePicker::make('pesanan_sampai'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
-                                $data['created_from'],
+                                $data['pesanan_dari'],
                                 fn(Builder $query, $date): Builder => $query->whereDate('transaction_time', '>=', $date),
                             )
                             ->when(
-                                $data['created_until'],
+                                $data['pesanan_sampai'],
                                 fn(Builder $query, $date): Builder => $query->whereDate('transaction_time', '<=', $date),
                             );
+                    })
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+
+                        if ($data['pesanan_dari'] ?? null) {
+                            $indicators[] = Indicator::make('Pesanan dari ' . Carbon::parse($data['pesanan_dari'])->toFormattedDateString())
+                                ->removeField('pesanan_dari');
+                        }
+
+                        if ($data['pesanan_sampai'] ?? null) {
+                            $indicators[] = Indicator::make('Pesanan sampai ' . Carbon::parse($data['pesanan_sampai'])->toFormattedDateString())
+                                ->removeField('pesanan_sampai');
+                        }
+
+                        return $indicators;
                     })
             ])
             ->actions([
@@ -161,6 +173,29 @@ class OrderResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('export')
+                    ->color('gray')
+                    ->label('Export Pesanan')
+                    ->form([
+                        DatePicker::make('start_date')
+                            ->label('Dari tanggal')
+                            ->required(),
+                        DatePicker::make('end_date')
+                            ->label('Sampai tanggal')
+                            ->required(),
+                    ])
+                    ->openUrlInNewTab()
+                    ->action(function (array $data) {
+                        return redirect()->route('download-data-pesanan', [
+                            'start_date' => $data['start_date'],
+                            'end_date' => $data['end_date']
+                        ]);
+                    })
+                    ->visible(function () {
+                        return Order::exists();
+                    }),
             ]);
     }
 

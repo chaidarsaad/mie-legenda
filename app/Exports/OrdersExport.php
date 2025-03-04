@@ -10,6 +10,15 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class OrdersExport implements FromCollection, WithHeadings, WithTitle
 {
+    protected $startDate;
+    protected $endDate;
+
+    public function __construct($startDate, $endDate)
+    {
+        $this->startDate = Carbon::parse($startDate)->startOfDay();
+        $this->endDate = Carbon::parse($endDate)->endOfDay();
+    }
+
     /**
      * @return \Illuminate\Support\Collection
      */
@@ -21,7 +30,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle
 
         // Ambil data pesanan dalam rentang bulan ini
         $orders = Order::select('transaction_time', 'total_price', 'total_item', 'payment_method', 'kasir_id')
-            ->whereBetween('transaction_time', [$startOfMonth, $endOfMonth])
+            ->whereBetween('transaction_time', [$this->startDate, $this->endDate])
             ->get()
             ->map(function ($order) {
                 $kasir_name = $order->kasir ? $order->kasir->name : 'Tidak ada kasir';
@@ -48,11 +57,11 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle
     public function headings(): array
     {
         return [
-            'transaction_time',
-            'total_price',
-            'total_item',
-            'payment_method',
-            'kasir_id'
+            'Tanggal Pesanan',
+            'Total Harga',
+            'Total Item',
+            'Metode Pembayaran',
+            'Nama Kasir'
         ];
     }
 

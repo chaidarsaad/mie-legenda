@@ -15,14 +15,6 @@ class ListOrders extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Action::make("Export Pesanan")
-                ->label('Export Pesanan Bulan Ini')
-                ->url(route('download-data-pesanan'))
-                ->color('primary')
-                ->icon('heroicon-s-arrow-up-tray')
-                ->visible(function () {
-                    return Order::exists();
-                }),
             Actions\CreateAction::make(),
         ];
     }
