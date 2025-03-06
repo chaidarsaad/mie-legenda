@@ -93,7 +93,7 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('transaction_time')
                     ->searchable()
                     ->label(__('Transaction Time'))
-                    ->dateTime()
+                    ->dateTime('d M Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_price')
                     ->searchable()

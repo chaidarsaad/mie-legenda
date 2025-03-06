@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 
 class ExpenseResource extends Resource
@@ -44,10 +45,10 @@ class ExpenseResource extends Resource
                     ->numeric()
                     ->default(0)
                     ->prefix('Rp'),
-                Forms\Components\DatePicker::make('created_at')
+                Forms\Components\DateTimePicker::make('created_at')
                     ->label(__('Date'))
                     ->required()
-                    ->default(now()),
+                    ->default(Carbon::now()),
                 Forms\Components\Textarea::make('description')
                     ->label(__('Description'))
                     ->columnSpanFull(),
@@ -73,7 +74,7 @@ class ExpenseResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->searchable()
                     ->label(__('Created At'))
-                    ->dateTime()
+                    ->dateTime('d M Y H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label(__('Updated At'))

@@ -24,26 +24,24 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle
      */
     public function collection()
     {
-        // Menentukan rentang waktu bulan ini
-        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00');
-        $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d 23:59:59');
-
-        // Ambil data pesanan dalam rentang bulan ini
         $orders = Order::select('transaction_time', 'total_price', 'total_item', 'payment_method', 'kasir_id')
             ->whereBetween('transaction_time', [$this->startDate, $this->endDate])
             ->get()
             ->map(function ($order) {
-                $kasir_name = $order->kasir ? $order->kasir->name : 'Tidak ada kasir';
-                $order->kasir_id = $kasir_name;
-                return $order;
+                return [
+                    'transaction_time' => Carbon::parse($order->transaction_time)->format('d M Y H:i:s'), // Format sesuai permintaan
+                    'total_price' => $order->total_price,
+                    'total_item' => $order->total_item,
+                    'payment_method' => $order->payment_method,
+                    'kasir_id' => $order->kasir ? $order->kasir->name : 'Tidak ada kasir',
+                ];
             });
-
 
         // Hitung total price dari semua pesanan
         $totalPrice = $orders->sum('total_price');
 
-        // Tambahkan baris dengan total_price di bagian bawah
-        $orders->push((object)[
+        // Tambahkan baris total di bagian bawah
+        $orders->push([
             'transaction_time' => 'Total',
             'total_price' => $totalPrice,
             'total_item' => '',
@@ -51,7 +49,7 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle
             'kasir_id' => ''
         ]);
 
-        return $orders;
+        return collect($orders);
     }
 
     public function headings(): array

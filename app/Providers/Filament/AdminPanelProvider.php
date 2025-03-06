@@ -66,6 +66,8 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->breadcrumbs(false)
+            ->unsavedChangesAlerts()
             ->spa()
             ->spaUrlExceptions(fn(): array => [
                 url(route('download-template-product')),
