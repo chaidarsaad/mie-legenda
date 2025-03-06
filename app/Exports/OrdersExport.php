@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 class OrdersExport implements FromCollection, WithHeadings, WithTitle, WithEvents
 {
@@ -149,6 +150,11 @@ class OrdersExport implements FromCollection, WithHeadings, WithTitle, WithEvent
                         $sheet->getStyle("A{$row}")->applyFromArray($leftStyle);
                     }
                 }
+
+                // 3. Terapkan format mata uang Rupiah untuk kolom B (Total Harga), D (Total Pemasukan), dan E (Laba, Pengeluaran)
+                $sheet->getStyle("B2:B{$highestRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
+                $sheet->getStyle("D2:D{$highestRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
+                $sheet->getStyle("E2:E{$highestRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
             }
         ];
     }
