@@ -5,11 +5,15 @@ namespace App\Filament\Widgets;
 use App\Models\Order;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Carbon;
 
 class BiggestOrder extends BaseWidget
 {
-    protected static ?int $sort = 4;
+    use InteractsWithPageFilters;
+
+    protected static ?int $sort = 2;
     protected static ?string $heading = 'Order terbesar';
 
     public static function canView(): bool
@@ -19,7 +23,25 @@ class BiggestOrder extends BaseWidget
     }
     public function table(Table $table): Table
     {
-        $query = Order::query()->orderBy('total_price', 'desc')->take(10);
+        $startDate = $this->filters['startDate'] ?? null;
+        $endDate = $this->filters['endDate'] ?? null;
+
+        if (!empty($this->filters['startDate'])) {
+            $startDate = Carbon::parse($this->filters['startDate']);
+        }
+
+        if (!empty($this->filters['endDate'])) {
+            $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
+        }
+
+        $query = Order::query()->orderBy('total_price', 'desc');
+        if ($startDate && $endDate) {
+            $query->whereBetween('transaction_time', [$startDate, $endDate]);
+        } elseif ($startDate) {
+            $query->where('transaction_time', '>=', $startDate);
+        } elseif ($endDate) {
+            $query->where('transaction_time', '<=', $endDate);
+        }
 
         return $table
             ->query(

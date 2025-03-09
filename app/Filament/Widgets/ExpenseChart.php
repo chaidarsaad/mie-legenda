@@ -12,7 +12,7 @@ use Illuminate\Container\Attributes\Auth;
 class ExpenseChart extends ChartWidget
 {
     protected static ?string $heading = 'Pengeluaran';
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 4;
     public ?string $filter = 'today';
     protected static string $color = 'danger';
 

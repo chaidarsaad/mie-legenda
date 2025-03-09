@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class OmsetChart extends ChartWidget
 {
     protected static ?string $heading = 'Omset';
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 3;
     public ?string $filter = 'today';
     protected static string $color = 'success';
 

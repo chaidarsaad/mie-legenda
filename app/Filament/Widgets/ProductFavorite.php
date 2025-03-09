@@ -3,14 +3,19 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ProductFavorite extends BaseWidget
 {
-    protected static ?int $sort = 3;
+    use InteractsWithPageFilters;
+    protected static ?int $sort = 1;
     protected static ?string $heading = 'Produk paling banyak dipesan';
 
     public static function canView(): bool
@@ -20,20 +25,56 @@ class ProductFavorite extends BaseWidget
     }
     public function table(Table $table): Table
     {
-        $productQuery = Product::query()
-            ->withCount('orderItems')
-            ->orderByDesc('order_items_count')
-            ->take(10);
+        $startDate = $this->filters['startDate'] ?? null;
+        $endDate = $this->filters['endDate'] ?? null;
+
+        if (!empty($this->filters['startDate'])) {
+            $startDate = Carbon::parse($this->filters['startDate']);
+        }
+
+        if (!empty($this->filters['endDate'])) {
+            $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
+        }
+
+        $query = OrderItem::query()
+            ->select([
+                'order_items.product_id as id', // Alias sebagai id agar Filament mengenalinya
+                'products.name as product_name',
+                DB::raw('COUNT(DISTINCT order_id) as total_orders'),
+                DB::raw('SUM(quantity) as total_quantity'),
+                DB::raw('SUM(total_price * quantity) as total_revenue')
+            ])
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->whereHas('order', function ($query) use ($startDate, $endDate) {
+                if ($startDate && $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                } elseif ($startDate) {
+                    $query->where('created_at', '>=', $startDate);
+                } elseif ($endDate) {
+                    $query->where('created_at', '<=', $endDate);
+                }
+            })
+            ->groupBy('order_items.product_id', 'products.name')
+            ->orderByDesc('total_quantity');
+
+
+
+
         return $table
             ->query(
-                $productQuery
+                $query
             )
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('product_name')
                     ->label(__('Name Product')),
-                Tables\Columns\TextColumn::make('order_items_count')
-                    ->label(__('Dipesan')),
-            ])->defaultPaginationPageOption(5)
+                Tables\Columns\TextColumn::make('total_quantity')
+                    ->label('Total Terjual'),
+                Tables\Columns\TextColumn::make('total_revenue')
+                    ->label('Total Pendapatan')
+                    ->money('IDR'),
+            ])
+            ->paginationPageOptions([5, 10, 25, 50, 100, 250])
+            ->defaultPaginationPageOption(5)
             ->poll('10s');
     }
 }
