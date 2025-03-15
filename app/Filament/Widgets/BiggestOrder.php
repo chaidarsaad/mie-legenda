@@ -60,6 +60,7 @@ class BiggestOrder extends BaseWidget
                 Tables\Columns\TextColumn::make('payment_method')
                     ->label(__('Payment Method')),
             ])->defaultPaginationPageOption(5)
-            ->poll('10s');
+            // ->poll('10s')
+        ;
     }
 }
