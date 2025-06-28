@@ -55,6 +55,7 @@ class BiggestOrder extends BaseWidget
                 Tables\Columns\TextColumn::make('total_price')
                     ->prefix('Rp ')
                     ->label(__('Total Price'))
+                    ->money('IDR')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('payment_method')

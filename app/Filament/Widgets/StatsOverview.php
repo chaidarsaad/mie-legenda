@@ -72,9 +72,9 @@ class StatsOverview extends BaseWidget
             Stat::make('Total Categories', $category_count),
             Stat::make('Total Product', $product_count),
             Stat::make('Total Orders', $order_count),
-            Stat::make('Total Pemasukan', 'Rp ' . number_format($pemasukan, 0, ",", ",")),
-            Stat::make('Total Pengeluaran', 'Rp ' . number_format($pengeluaran, 0, ",", ",")),
-            Stat::make('Total Laba', 'Rp ' . number_format($laba, 0, ",", ",")),
+            Stat::make('Total Pemasukan', 'Rp ' . number_format($pemasukan, 2, ",", ",")),
+            Stat::make('Total Pengeluaran', 'Rp ' . number_format($pengeluaran, 2, ",", ",")),
+            Stat::make('Total Laba', 'Rp ' . number_format($laba, 2, ",", ",")),
         ];
     }
 }
