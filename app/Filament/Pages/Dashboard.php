@@ -20,24 +20,23 @@ class Dashboard extends BaseDashboard
             ->schema([
                 Section::make()
                     ->schema([
-                          DatePicker::make('startDate')
-                        ->label('Tanggal Mulai')
-                        ->native(false)
-                        ->closeOnDateSelection()
-                        ->displayFormat('l, d F Y')
-                        ->placeholder('Pilih Tanggal')
-                        ->default(fn () => Carbon::createFromFormat('d/m/Y', '01/01/2025')->startOfDay())
-                        ->maxDate(fn(Get $get) => $get('endDate') ?? now()->endOfDay()),
-
-                    DatePicker::make('endDate')
-                        ->label('Tanggal Akhir')
-                        ->closeOnDateSelection()
-                        ->placeholder('Pilih Tanggal')
-                        ->native(false)
-                        ->displayFormat('l, d F Y')
-                        ->default(fn () => now()->endOfDay())
-                        ->minDate(fn(Get $get) => $get('startDate') ?? Carbon::createFromFormat('d/m/Y', '01/01/2025')->startOfDay())
-                        ->maxDate(now()->endOfDay()),
+                           DatePicker::make('startDate')
+                            ->label('Tanggal Mulai')
+                            ->native(false)
+                            ->closeOnDateSelection()
+                            ->displayFormat('l, d F Y')
+                            ->placeholder('Pilih Tanggal')
+                            ->maxDate(fn(Get $get) => $get('endDate') ?: now()),
+                        DatePicker::make('endDate')
+                            ->label('Tanggal Akhir')
+                            ->closeOnDateSelection()
+                            ->placeholder('Pilih Tanggal')
+                            ->native(false)
+                            ->displayFormat('l, d F Y')
+                            ->minDate(fn(Get $get) => $get('startDate') ?: now()->startOfMonth())
+                            ->maxDate(now())
+                            ->default(fn() => now()->endOfDay())
+                            ->required(),
                     ])
                     ->columns(2),
             ]);
