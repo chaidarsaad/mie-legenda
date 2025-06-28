@@ -15,6 +15,8 @@ class BiggestOrder extends BaseWidget
     protected static bool $isLazy = false;
     protected static ?int $sort = 2;
     protected static ?string $heading = 'Order terbesar';
+        protected static bool $hasPageFilters = true;
+
 
     public static function canView(): bool
     {
@@ -23,16 +25,19 @@ class BiggestOrder extends BaseWidget
     }
     public function table(Table $table): Table
     {
-        $startDate = $this->filters['startDate'] ?? null;
-        $endDate = $this->filters['endDate'] ?? null;
+        // Default startDate ke 01/01/2025, endDate ke sekarang
+    $startDate = Carbon::createFromFormat('d/m/Y', '01/01/2025')->startOfDay();
+    $endDate = now()->endOfDay();
 
-        if (!empty($this->filters['startDate'])) {
-            $startDate = Carbon::parse($this->filters['startDate']);
-        }
+    // Override jika filter startDate diberikan
+    if (!empty($this->filters['startDate'])) {
+        $startDate = Carbon::parse($this->filters['startDate'])->startOfDay();
+    }
 
-        if (!empty($this->filters['endDate'])) {
-            $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
-        }
+    // Override jika filter endDate diberikan
+    if (!empty($this->filters['endDate'])) {
+        $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
+    }
 
         $query = Order::query()->orderBy('total_price', 'desc');
         if ($startDate && $endDate) {

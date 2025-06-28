@@ -18,6 +18,8 @@ class ProductFavorite extends BaseWidget
     protected static ?int $sort = 1;
     protected static ?string $heading = 'Produk paling banyak dipesan';
     protected static bool $isLazy = false;
+        protected static bool $hasPageFilters = true;
+
 
     public static function canView(): bool
     {
@@ -26,16 +28,19 @@ class ProductFavorite extends BaseWidget
     }
     public function table(Table $table): Table
     {
-        $startDate = $this->filters['startDate'] ?? null;
-        $endDate = $this->filters['endDate'] ?? null;
+        // Default startDate ke 01/01/2025, endDate ke sekarang
+    $startDate = Carbon::createFromFormat('d/m/Y', '01/01/2025')->startOfDay();
+    $endDate = now()->endOfDay();
 
-        if (!empty($this->filters['startDate'])) {
-            $startDate = Carbon::parse($this->filters['startDate']);
-        }
+    // Override jika filter startDate diberikan
+    if (!empty($this->filters['startDate'])) {
+        $startDate = Carbon::parse($this->filters['startDate'])->startOfDay();
+    }
 
-        if (!empty($this->filters['endDate'])) {
-            $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
-        }
+    // Override jika filter endDate diberikan
+    if (!empty($this->filters['endDate'])) {
+        $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
+    }
 
         $query = OrderItem::query()
             ->select([

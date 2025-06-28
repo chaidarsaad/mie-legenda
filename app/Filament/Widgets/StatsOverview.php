@@ -19,6 +19,8 @@ class StatsOverview extends BaseWidget
 
     protected static ?int $sort = 0;
     protected static bool $isLazy = false;
+        protected static bool $hasPageFilters = true;
+
 
     public static function canView(): bool
     {
@@ -27,54 +29,39 @@ class StatsOverview extends BaseWidget
     }
 
     protected function getStats(): array
-    {
-        // Default startDate and endDate
-        $startDate = null; // Tidak ada batasan tanggal awal
-        $endDate = now()->endOfDay(); // Default hingga sekarang
+{
+    // Default startDate ke 01/01/2025, endDate ke sekarang
+    $startDate = Carbon::createFromFormat('d/m/Y', '01/01/2025')->startOfDay();
+    $endDate = now()->endOfDay();
 
-        // Check if startDate filter is provided
-        if (!empty($this->filters['startDate'])) {
-            $startDate = Carbon::parse($this->filters['startDate']);
-        }
-
-        // Check if endDate filter is provided
-        if (!empty($this->filters['endDate'])) {
-            $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
-        }
-
-        // Query logic for optional startDate and endDate
-        $orderQuery = Order::query();
-        if ($startDate && $endDate) {
-            $orderQuery->whereBetween('transaction_time', [$startDate, $endDate]);
-        } elseif ($startDate) {
-            $orderQuery->where('transaction_time', '>=', $startDate);
-        } elseif ($endDate) {
-            $orderQuery->where('transaction_time', '<=', $endDate);
-        }
-
-        $expenseQuery = Expense::query();
-        if ($startDate && $endDate) {
-            $expenseQuery->whereBetween('created_at', [$startDate, $endDate]);
-        } elseif ($startDate) {
-            $expenseQuery->where('created_at', '>=', $startDate);
-        } elseif ($endDate) {
-            $expenseQuery->where('created_at', '<=', $endDate);
-        }
-
-        $category_count = Category::count();
-        $product_count = Product::count();
-        $order_count = $orderQuery->count();
-        $pemasukan = $orderQuery->sum('total_price');
-        $pengeluaran = $expenseQuery->sum('amount');
-        $laba = $pemasukan - $pengeluaran;
-
-        return [
-            Stat::make('Total Categories', $category_count),
-            Stat::make('Total Product', $product_count),
-            Stat::make('Total Orders', $order_count),
-            Stat::make('Total Pemasukan', 'Rp ' . number_format($pemasukan, 2, ",", ",")),
-            Stat::make('Total Pengeluaran', 'Rp ' . number_format($pengeluaran, 2, ",", ",")),
-            Stat::make('Total Laba', 'Rp ' . number_format($laba, 2, ",", ",")),
-        ];
+    // Override jika filter startDate diberikan
+    if (!empty($this->filters['startDate'])) {
+        $startDate = Carbon::parse($this->filters['startDate'])->startOfDay();
     }
+
+    // Override jika filter endDate diberikan
+    if (!empty($this->filters['endDate'])) {
+        $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
+    }
+
+    // Query logic for optional startDate and endDate
+    $orderQuery = Order::query()->whereBetween('transaction_time', [$startDate, $endDate]);
+    $expenseQuery = Expense::query()->whereBetween('created_at', [$startDate, $endDate]);
+
+    $category_count = Category::count();
+    $product_count = Product::count();
+    $order_count = $orderQuery->count();
+    $pemasukan = $orderQuery->sum('total_price');
+    $pengeluaran = $expenseQuery->sum('amount');
+    $laba = $pemasukan - $pengeluaran;
+
+    return [
+        Stat::make('Total Categories', $category_count),
+        Stat::make('Total Product', $product_count),
+        Stat::make('Total Orders', $order_count),
+        Stat::make('Total Pemasukan', 'Rp ' . number_format($pemasukan, 2, ",", ",")),
+        Stat::make('Total Pengeluaran', 'Rp ' . number_format($pengeluaran, 2, ",", ",")),
+        Stat::make('Total Laba', 'Rp ' . number_format($laba, 2, ",", ",")),
+    ];
+}
 }
