@@ -17,6 +17,7 @@ class ProductFavorite extends BaseWidget
     use InteractsWithPageFilters;
     protected static ?int $sort = 1;
     protected static ?string $heading = 'Produk paling banyak dipesan';
+    protected static bool $isLazy = false;
 
     public static function canView(): bool
     {

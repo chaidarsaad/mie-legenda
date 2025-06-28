@@ -11,6 +11,7 @@ use Illuminate\Container\Attributes\Auth;
 
 class ExpenseChart extends ChartWidget
 {
+    protected static bool $isLazy = false;
     protected static ?string $heading = 'Pengeluaran';
     protected static ?int $sort = 4;
     public ?string $filter = 'today';

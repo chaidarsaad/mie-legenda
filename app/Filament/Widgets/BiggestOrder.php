@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 class BiggestOrder extends BaseWidget
 {
     use InteractsWithPageFilters;
-
+    protected static bool $isLazy = false;
     protected static ?int $sort = 2;
     protected static ?string $heading = 'Order terbesar';
 
