@@ -22,7 +22,7 @@ class Dashboard extends BaseDashboard
                     ->schema([
                            DatePicker::make('startDate')
                             ->label('Tanggal Mulai')
-                            ->native(false)
+                            ->native(true)
                             ->closeOnDateSelection()
                             ->displayFormat('l, d F Y')
                             ->placeholder('Pilih Tanggal')
@@ -31,7 +31,7 @@ class Dashboard extends BaseDashboard
                             ->label('Tanggal Akhir')
                             ->closeOnDateSelection()
                             ->placeholder('Pilih Tanggal')
-                            ->native(false)
+                            ->native(true)
                             ->displayFormat('l, d F Y')
                             ->minDate(fn(Get $get) => $get('startDate') ?: now()->startOfMonth())
                             ->maxDate(now())
