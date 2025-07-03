@@ -1,7 +1,7 @@
 🧾 Backend Point of Sales (POS) - Flutter App
 Deskripsi Singkat:
 
-Ini adalah repository backend untuk aplikasi Point of Sales (POS) yang digunakan dalam lingkungan internal Koperasi atau Toko. Backend ini dibangun menggunakan Laravel 11 dengan Filament Admin Panel, dan akan diakses oleh aplikasi frontend berbasis Flutter.
+Ini adalah repository backend untuk aplikasi Point of Sales (POS) yang digunakan bisnis Mie Legenda. Backend ini dibangun menggunakan Laravel 11 dengan Filament Admin Panel, dan akan diakses oleh aplikasi frontend berbasis Flutter.
 
 🔧 Fitur Backend:
 🔐 Otentikasi berbasis token (Laravel Sanctum / Passport)
