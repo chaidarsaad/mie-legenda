@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
@@ -14,33 +15,27 @@ use Illuminate\Support\Facades\DB;
 
 class ProductFavorite extends BaseWidget
 {
-    use InteractsWithPageFilters;
+    use InteractsWithPageFilters, HasWidgetShield;
     protected static ?int $sort = 1;
     protected static ?string $heading = 'Produk paling banyak dipesan';
     protected static bool $isLazy = false;
-        protected static bool $hasPageFilters = true;
+    protected static bool $hasPageFilters = true;
 
-
-    public static function canView(): bool
-    {
-        $user = auth()->user();
-        return $user ? $user->hasRole(['admin', 'super_admin']) : false;
-    }
     public function table(Table $table): Table
     {
         // Default startDate ke 01/01/2025, endDate ke sekarang
-    $startDate = Carbon::createFromFormat('d/m/Y', '01/01/2025')->startOfDay();
-    $endDate = now()->endOfDay();
+        $startDate = Carbon::createFromFormat('d/m/Y', '01/01/2025')->startOfDay();
+        $endDate = now()->endOfDay();
 
-    // Override jika filter startDate diberikan
-    if (!empty($this->filters['startDate'])) {
-        $startDate = Carbon::parse($this->filters['startDate'])->startOfDay();
-    }
+        // Override jika filter startDate diberikan
+        if (!empty($this->filters['startDate'])) {
+            $startDate = Carbon::parse($this->filters['startDate'])->startOfDay();
+        }
 
-    // Override jika filter endDate diberikan
-    if (!empty($this->filters['endDate'])) {
-        $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
-    }
+        // Override jika filter endDate diberikan
+        if (!empty($this->filters['endDate'])) {
+            $endDate = Carbon::parse($this->filters['endDate'])->endOfDay();
+        }
 
         $query = OrderItem::query()
             ->select([

@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Expense;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
@@ -11,17 +12,12 @@ use Illuminate\Container\Attributes\Auth;
 
 class ExpenseChart extends ChartWidget
 {
+    use HasWidgetShield;
     protected static bool $isLazy = false;
     protected static ?string $heading = 'Pengeluaran';
     protected static ?int $sort = 4;
     public ?string $filter = 'today';
     protected static string $color = 'danger';
-
-    public static function canView(): bool
-    {
-        $user = auth()->user();
-        return $user ? $user->hasRole(['admin', 'super_admin']) : false;
-    }
 
     protected function getData(): array
     {

@@ -9,6 +9,7 @@
         "php": "^8.2",
         "bezhansalleh/filament-language-switch": "^3.1",
         "bezhansalleh/filament-shield": "^3.3",
+        "devonab/filament-easy-footer": "^1.1",
         "filament/filament": "^3.2",
         "flowframe/laravel-trend": "^0.3.0",
         "guzzlehttp/guzzle": "^7.2",
@@ -16,6 +17,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "^3.1",
+        "marcelweidum/filament-expiration-notice": "^1.0",
         "resend/resend-laravel": "^0.14.0",
         "swisnl/filament-backgrounds": "^1.1",
         "tomatophp/filament-pwa": "^1.0"

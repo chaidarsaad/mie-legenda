@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "593669d5b09eb52926191234ca155ec5",
+    "content-hash": "e18b408a8a81d037e68161a408939eb0",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -698,6 +698,82 @@
                 }
             ],
             "time": "2024-05-06T09:10:03+00:00"
+        },
+        {
+            "name": "devonab/filament-easy-footer",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Devonab/filament-easy-footer.git",
+                "reference": "0ea32337f40b1f12e4df343ae2dc778387f422e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Devonab/filament-easy-footer/zipball/0ea32337f40b1f12e4df343ae2dc778387f422e1",
+                "reference": "0ea32337f40b1f12e4df343ae2dc778387f422e1",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0",
+                "php": "^8.1|^8.2|^8.3|^8.4",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^2.9||^3.0",
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^8.1.1||^7.10.0",
+                "orchestra/testbench": "^10.0.0||^9.0.0||^8.22.0",
+                "pestphp/pest": "^2.20|^3.7",
+                "pestphp/pest-plugin-arch": "^2.0|^v3.0.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^v3.1.0",
+                "pestphp/pest-plugin-livewire": "^2.1|^v3.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentEasyFooter": "Devonab\\FilamentEasyFooter\\Facades\\EasyFooter"
+                    },
+                    "providers": [
+                        "Devonab\\FilamentEasyFooter\\EasyFooterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Devonab\\FilamentEasyFooter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Devonab",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple plugin to display a customizable footer in your filament application!",
+            "homepage": "https://github.com/devonab/filament-easy-footer",
+            "keywords": [
+                "Devonab",
+                "filament",
+                "filament-easy-footer",
+                "filament-php",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/devonab/filament-easy-footer/issues",
+                "source": "https://github.com/devonab/filament-easy-footer"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Devonab",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-05-21T07:49:14+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -3908,6 +3984,83 @@
                 }
             ],
             "time": "2024-10-10T12:33:01+00:00"
+        },
+        {
+            "name": "marcelweidum/filament-expiration-notice",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MarcelWeidum/filament-expiration-notice.git",
+                "reference": "efb3266945bc9e719e0c372430871db15be8d03d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MarcelWeidum/filament-expiration-notice/zipball/efb3266945bc9e719e0c372430871db15be8d03d",
+                "reference": "efb3266945bc9e719e0c372430871db15be8d03d",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.0|^4.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.22",
+                "nunomaduro/collision": "^7.9",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^8.0",
+                "pestphp/pest": "^2.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "ExpirationNoticePlugin": "MarcelWeidum\\ExpirationNoticePlugin\\Facades\\ExpirationNoticePlugin"
+                    },
+                    "providers": [
+                        "MarcelWeidum\\ExpirationNoticePlugin\\ExpirationNoticeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MarcelWeidum\\ExpirationNoticePlugin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MarcelWeidum",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Customize the livewire expiration notice",
+            "homepage": "https://github.com/marcelweidum/filament-expiration-notice",
+            "keywords": [
+                "MarcelWeidum",
+                "filament-expiration-notice",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/marcelweidum/filament-expiration-notice/issues",
+                "source": "https://github.com/marcelweidum/filament-expiration-notice"
+            },
+            "funding": [
+                {
+                    "url": "https://www.buymeacoffee.com/MarcelWeidum",
+                    "type": "buy_me_a_coffee"
+                }
+            ],
+            "time": "2025-07-12T11:16:05+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -12629,12 +12782,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }

@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Order;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
@@ -11,17 +12,13 @@ use Illuminate\Support\Facades\Auth;
 
 class OmsetChart extends ChartWidget
 {
+    use HasWidgetShield;
     protected static ?string $heading = 'Omset';
     protected static ?int $sort = 3;
     public ?string $filter = 'today';
     protected static string $color = 'success';
     protected static bool $isLazy = false;
 
-    public static function canView(): bool
-    {
-        $user = auth()->user();
-        return $user ? $user->hasRole(['admin', 'super_admin']) : false;
-    }
 
     protected function getData(): array
     {
