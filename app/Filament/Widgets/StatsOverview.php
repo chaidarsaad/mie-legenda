@@ -18,7 +18,6 @@ class StatsOverview extends BaseWidget
     use InteractsWithPageFilters, HasWidgetShield;
 
     protected static ?int $sort = 0;
-    protected static bool $isLazy = false;
     protected static bool $hasPageFilters = true;
     protected ?string $heading = 'Statistik';
 
